@@ -1,9 +1,6 @@
 package com.JDR11.ae2debugtools;
 
-import com.JDR11.ae2debugtools.client.gui.GuiHandler;
-
 import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
@@ -15,9 +12,6 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         // ClientRegistry.registerKeyBinding(new KeyBinding());
         ClientRegistry.registerKeyBinding(Config.openInterface);
-        FMLCommonHandler.instance()
-            .bus()
-            .register(new GuiHandler());
     }
 
     public void Init(FMLInitializationEvent event) {}
