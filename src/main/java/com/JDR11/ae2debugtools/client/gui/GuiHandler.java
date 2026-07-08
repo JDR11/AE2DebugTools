@@ -26,8 +26,6 @@ public class GuiHandler {
         if (openInterface.isPressed()) {
             ClientGUI.open(createGui());
             Ae2DebugTools.LOG.info("Opening GUI");
-            System.out.println("Opening GUI");
-            mc.thePlayer.addChatMessage(new ChatComponentText("Opening GUI"));
         }
     }
 
