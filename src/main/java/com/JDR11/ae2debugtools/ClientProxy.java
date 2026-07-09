@@ -1,6 +1,9 @@
 package com.JDR11.ae2debugtools;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import com.JDR11.ae2debugtools.client.gui.GuiHandler;
+import com.JDR11.ae2debugtools.client.render.RenderEventHandler;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -18,6 +21,7 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance()
             .bus()
             .register(new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(new RenderEventHandler());
     }
 
     public void Init(FMLInitializationEvent event) {}
