@@ -1,6 +1,9 @@
 package com.JDR11.ae2debugtools;
 
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
+
+import org.lwjgl.input.Keyboard;
 
 import com.JDR11.ae2debugtools.client.gui.GuiHandler;
 import com.JDR11.ae2debugtools.client.render.RenderEventHandler;
@@ -12,19 +15,28 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 
+    public static final KeyBinding openInterface = new KeyBinding(
+        "key.ae2debugtools.open_gui",
+        Keyboard.KEY_NONE,
+        "key.categories.ae2debugtools");
+
     // Override CommonProxy methods here, if you want a different behaviour on the client (e.g. registering renders).
     // Don't forget to call the super methods as well.
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-        // ClientRegistry.registerKeyBinding(new KeyBinding());
-        ClientRegistry.registerKeyBinding(Config.openInterface);
         FMLCommonHandler.instance()
             .bus()
             .register(new GuiHandler());
         MinecraftForge.EVENT_BUS.register(new RenderEventHandler());
     }
 
-    public void Init(FMLInitializationEvent event) {}
+    @Override
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+
+        ClientRegistry.registerKeyBinding(openInterface);
+    }
+
 }

@@ -1,10 +1,9 @@
 package com.JDR11.ae2debugtools.client.gui;
 
-import static com.JDR11.ae2debugtools.Config.openInterface;
-
 import net.minecraft.client.Minecraft;
 
 import com.JDR11.ae2debugtools.Ae2DebugTools;
+import com.JDR11.ae2debugtools.ClientProxy;
 import com.cleanroommc.modularui.factory.GuiFactories;
 import com.cleanroommc.modularui.factory.SimpleGuiFactory;
 import com.cleanroommc.modularui.utils.item.IItemHandlerModifiable;
@@ -27,7 +26,7 @@ public class GuiHandler {
             return;
         }
 
-        if (openInterface.isPressed()) {
+        if (ClientProxy.openInterface.isPressed()) {
             FACTORY.openClient();
             // ClientGUI.open(buildUI());
             Ae2DebugTools.LOG.info("Opening GUI");

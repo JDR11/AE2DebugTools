@@ -2,21 +2,9 @@ package com.JDR11.ae2debugtools;
 
 import java.io.File;
 
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.config.Configuration;
 
-import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class Config {
-
-    @SideOnly(Side.CLIENT)
-    public static final KeyBinding openInterface = new KeyBinding(
-        "key.ae2debugtools.open_gui",
-        Keyboard.KEY_NONE,
-        "key.categories.ae2debugtools");
 
     // Scanner
     public static int maxResults;
