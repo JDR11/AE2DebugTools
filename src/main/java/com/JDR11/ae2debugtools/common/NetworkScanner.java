@@ -87,11 +87,8 @@ public class NetworkScanner {
                             boolean itemMatch = itemFilter == null
                                 || (representation != null && itemFilter.isItemEqual(representation));
 
-                            Ae2DebugTools.LOG.info(
-                                "Found node {}",
-                                node.getGridBlock()
-                                    .getMachineRepresentation()
-                                    .getDisplayName());
+                            // Ae2DebugTools.LOG.info("Found node {}",
+                            // node.getGridBlock().getMachineRepresentation().getDisplayName());
                             if (textMatch && itemMatch) {
                                 matches.add(loc);
                             }
