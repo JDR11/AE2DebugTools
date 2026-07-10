@@ -16,6 +16,8 @@ public class ClientProxy extends CommonProxy {
     // Don't forget to call the super methods as well.
     @Override
     public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
+
         // ClientRegistry.registerKeyBinding(new KeyBinding());
         ClientRegistry.registerKeyBinding(Config.openInterface);
         FMLCommonHandler.instance()

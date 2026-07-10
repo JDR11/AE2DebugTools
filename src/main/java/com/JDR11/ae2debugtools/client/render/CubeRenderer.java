@@ -33,6 +33,9 @@ public class CubeRenderer {
             return;
         }
 
+        // Ae2DebugTools.LOG.info("[render] Rendering {} targets, timeAlive={}", this.cubeRendererTargets.size(),
+        // timeAlive);
+
         int alphaByte = getAlphaByte(timeAlive, solidDuration, fadeDuration);
 
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
@@ -50,11 +53,13 @@ public class CubeRenderer {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
+        GL11.glBegin(GL11.GL_LINES);
         for (CubeRendererTarget target : this.cubeRendererTargets) {
             Color c = target.getColour();
             int a = alphaByte;
 
-            GL11.glColor4d((byte) c.getRed(), (byte) c.getGreen(), (byte) c.getBlue(), (byte) a);
+            GL11.glColor4d(c.getRed() / 255.0, c.getGreen() / 255.0, c.getBlue() / 255.0, a / 255.0);
+            RenderCube(target.getBlockPos());
         }
 
         GL11.glEnd();
@@ -80,7 +85,7 @@ public class CubeRenderer {
             alpha = 0.0f;
         }
 
-        if (alpha < 1.0f) {
+        if (alpha > 1.0f) {
             alpha = 1.0f;
         }
 
@@ -88,6 +93,9 @@ public class CubeRenderer {
     }
 
     private void RenderCube(BlockPos pos) {
+
+        // Ae2DebugTools.LOG.info("[render] Drawing Cube at ({}, {}, {})", pos.x, pos.y, pos.z);
+
         float x = pos.getX();
         float y = pos.getY();
         float z = pos.getZ();

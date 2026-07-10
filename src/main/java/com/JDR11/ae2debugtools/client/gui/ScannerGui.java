@@ -1,16 +1,8 @@
 package com.JDR11.ae2debugtools.client.gui;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-
 import com.JDR11.ae2debugtools.Ae2DebugTools;
-import com.JDR11.ae2debugtools.client.NetworkScanner;
-import com.JDR11.ae2debugtools.client.render.CubeRendererTarget;
+import com.JDR11.ae2debugtools.common.network.PacketHandler;
+import com.JDR11.ae2debugtools.common.network.PacketScanRequest;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.factory.GuiData;
@@ -26,11 +18,8 @@ import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.PhantomItemSlot;
 import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
-import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 
 public class ScannerGui implements IGuiHolder<GuiData> {
-
-    Minecraft mc = Minecraft.getMinecraft();
 
     private final IItemHandlerModifiable itemHandler = new ItemStackHandler(1);
     private String scanTarget = "";
@@ -45,14 +34,14 @@ public class ScannerGui implements IGuiHolder<GuiData> {
             .child(
                 IKey.str("Network Scanner")
                     .asWidget()
-                    .top(7)
-                    .left(7))
+                    .topRel(0.03f)
+                    .leftRel(0.04f))
             .child(
                 Flow.row()
-                    .top(20)
-                    .bottom(88)
-                    .left(15)
-                    .right(0)
+                    .topRel(0.12f)
+                    .bottomRelOffset(0f, 88)
+                    .leftRel(0.11f)
+                    .rightRel(0f)
                     .mainAxisAlignment(Alignment.MainAxis.START)
                     .crossAxisAlignment(Alignment.CrossAxis.CENTER)
                     .childPadding(6)
@@ -68,23 +57,9 @@ public class ScannerGui implements IGuiHolder<GuiData> {
                                     .asWidget()
                                     .center())
                             .onMouseTapped(mouseButton -> {
-                                Ae2DebugTools.LOG.info("Scan button clicked, target filter: '{}'", scanTarget);
-
-                                List<ChunkCoordinates> results = NetworkScanner.scan(scanTarget);
-                                Ae2DebugTools.LOG.info("Scan found {} matching block(s)", results.size());
-
-                                mc.thePlayer.addChatComponentMessage(
-                                    new ChatComponentText(
-                                        "Scan found " + results.size() + " block(s) matching \"" + scanTarget + "\""));
-
-                                List<CubeRendererTarget> targets = new ArrayList<>();
-                                for (ChunkCoordinates coords : results) {
-                                    targets.add(
-                                        new CubeRendererTarget(
-                                            new BlockPos(coords.posX, coords.posY, coords.posZ),
-                                            Color.CYAN));
-                                }
-
+                                Ae2DebugTools.LOG
+                                    .info("Scan button clicked, sending request for filter '{}'", scanTarget);
+                                PacketHandler.INSTANCE.sendToServer(new PacketScanRequest(scanTarget));
                                 return true;
                             })));
 

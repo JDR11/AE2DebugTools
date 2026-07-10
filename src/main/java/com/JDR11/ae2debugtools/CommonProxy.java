@@ -1,5 +1,9 @@
 package com.JDR11.ae2debugtools;
 
+import com.JDR11.ae2debugtools.common.network.MainThreadScheduler;
+import com.JDR11.ae2debugtools.common.network.PacketHandler;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -12,7 +16,12 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
-        Ae2DebugTools.LOG.info(Config.greeting);
+        PacketHandler.init();
+
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new MainThreadScheduler());
+
         Ae2DebugTools.LOG.info("I am AE2DebugTools at version " + Tags.VERSION);
     }
 
