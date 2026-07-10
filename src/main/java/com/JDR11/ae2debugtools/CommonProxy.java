@@ -1,5 +1,6 @@
 package com.JDR11.ae2debugtools;
 
+import com.JDR11.ae2debugtools.client.gui.ScannerGuiFactory;
 import com.JDR11.ae2debugtools.common.network.MainThreadScheduler;
 import com.JDR11.ae2debugtools.common.network.PacketHandler;
 
@@ -17,6 +18,7 @@ public class CommonProxy {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
         PacketHandler.init();
+        ScannerGuiFactory.FACTORY.getClass();
 
         FMLCommonHandler.instance()
             .bus()
