@@ -1,5 +1,7 @@
 package com.JDR11.ae2debugtools.client.gui;
 
+import net.minecraft.item.ItemStack;
+
 import com.JDR11.ae2debugtools.Ae2DebugTools;
 import com.JDR11.ae2debugtools.common.network.PacketHandler;
 import com.JDR11.ae2debugtools.common.network.PacketScanRequest;
@@ -57,9 +59,12 @@ public class ScannerGui implements IGuiHolder<GuiData> {
                                     .asWidget()
                                     .center())
                             .onMouseTapped(mouseButton -> {
-                                Ae2DebugTools.LOG
-                                    .info("Scan button clicked, sending request for filter '{}'", scanTarget);
-                                PacketHandler.INSTANCE.sendToServer(new PacketScanRequest(scanTarget));
+                                ItemStack itemFilter = itemHandler.getStackInSlot(0);
+                                Ae2DebugTools.LOG.info(
+                                    "Scan button clicked, sending request for filter '{}', item={}",
+                                    scanTarget,
+                                    itemFilter);
+                                PacketHandler.INSTANCE.sendToServer(new PacketScanRequest(scanTarget, itemFilter));
                                 return true;
                             })));
 

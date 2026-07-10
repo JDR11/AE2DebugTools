@@ -9,6 +9,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 
 import com.JDR11.ae2debugtools.Ae2DebugTools;
+import com.JDR11.ae2debugtools.Config;
 import com.JDR11.ae2debugtools.client.render.CubeRenderer;
 import com.JDR11.ae2debugtools.client.render.CubeRendererTarget;
 import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
@@ -24,7 +25,7 @@ public class PacketScanResponse implements IMessage {
     private String filter;
     private int[] coordinates;
 
-    // public PacketScanResponse() {}
+    public PacketScanResponse() {}
 
     public PacketScanResponse(String filter, List<ChunkCoordinates> results) {
         this.filter = filter;
@@ -69,7 +70,7 @@ public class PacketScanResponse implements IMessage {
                             message.coordinates[i * 3],
                             message.coordinates[i * 3 + 1],
                             message.coordinates[i * 3 + 2]);
-                        targets.add(new CubeRendererTarget(pos, Color.CYAN));
+                        targets.add(new CubeRendererTarget(pos, new Color(Config.cubeHighlightColour)));
                     }
                     CubeRenderer.INSTANCE.draw(targets);
 

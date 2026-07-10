@@ -10,6 +10,8 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import com.JDR11.ae2debugtools.Ae2DebugTools;
+import com.JDR11.ae2debugtools.Config;
 import com.gtnewhorizon.gtnhlib.blockpos.BlockPos;
 
 public class CubeRenderer {
@@ -25,16 +27,18 @@ public class CubeRenderer {
 
     public void tryToRender(RenderWorldLastEvent event) {
         long timeAlive = System.currentTimeMillis() - currentTime;
-        long totalLife = 3000;
-        long fadeDuration = 1000;
+        long totalLife = Config.cubeTotalLifeMillis;
+        long fadeDuration = Config.cubeFadeDurationMillis;
         long solidDuration = totalLife - fadeDuration;
 
         if (this.cubeRendererTargets.isEmpty() || timeAlive >= totalLife) {
             return;
         }
 
-        // Ae2DebugTools.LOG.info("[render] Rendering {} targets, timeAlive={}", this.cubeRendererTargets.size(),
-        // timeAlive);
+        if (Config.verboseLogging) {
+            Ae2DebugTools.LOG
+                .info("[render] Rendering {} targets, timeAlive={}", this.cubeRendererTargets.size(), timeAlive);
+        }
 
         int alphaByte = getAlphaByte(timeAlive, solidDuration, fadeDuration);
 
@@ -52,6 +56,7 @@ public class CubeRenderer {
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glLineWidth(Config.cubeLineWidth);
 
         GL11.glBegin(GL11.GL_LINES);
         for (CubeRendererTarget target : this.cubeRendererTargets) {
