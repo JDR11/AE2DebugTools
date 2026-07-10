@@ -10,6 +10,7 @@ public class Config {
     public static int maxResults;
     public static int scanRadius;
     public static boolean verboseLogging;
+    public static boolean writeReportFile;
 
     // CubeRenderer
     public static int cubeTotalLifeMillis;
@@ -44,6 +45,12 @@ public class Config {
                 "scanner",
                 false,
                 "If true, logs detailed per-node scan diagnostics to the console. Useful for debugging, noisy otherwise.");
+
+            writeReportFile = configuration.getBoolean(
+                "writeReportFile",
+                "scanner",
+                true,
+                "If true, writes a full text report of every scan match (location + dimension) to <minecraft folder>/ae2debugtools/scan_reports/ each time you scan.");
 
             cubeTotalLifeMillis = configuration.getInt(
                 "totalLifeMillis",

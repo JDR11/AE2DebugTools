@@ -1,15 +1,12 @@
 package com.JDR11.ae2debugtools.common.network;
 
-import java.util.Map;
+import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 
-import com.JDR11.ae2debugtools.Ae2DebugTools;
 import com.JDR11.ae2debugtools.Config;
 import com.JDR11.ae2debugtools.common.NetworkScanner;
 
@@ -71,31 +68,35 @@ public class PacketScanRequest implements IMessage {
                         }
                     }
 
-                    Ae2DebugTools.LOG
-                        .info("[server] Scan request from {} for filter {}", player.getDisplayName(), message.filter);
-
-                    NetworkScanner.ScanResult scanResult = NetworkScanner
+                    List<NetworkScanner.ScanMatch> matches = NetworkScanner
                         .scan(world, player, message.filter, itemFilter, Config.scanRadius);
 
-                    PacketHandler.INSTANCE.sendTo(new PacketScanResponse(message.filter, scanResult.results), player);
-
-                    if (!scanResult.otherDimensionCounts.isEmpty()) {
-                        StringBuilder stringBuilder = new StringBuilder("Also found matching parts in: ");
-                        boolean first = true;
-                        for (Map.Entry<Integer, Integer> entry : scanResult.otherDimensionCounts.entrySet()) {
-                            if (!first) stringBuilder.append(", ");
-                            stringBuilder.append(entry.getValue())
-                                .append(" in dimension ")
-                                .append(entry.getKey());
-                            first = false;
-                        }
-                        player.addChatMessage(new ChatComponentText(stringBuilder.toString()));
-                        player.addChatComponentMessage(
-                            new ChatComponentText(
-                                DimensionManager.getWorld(player.dimension)
-                                    .getProviderName()
-                                    .toString()));
-                    }
+                    PacketHandler.INSTANCE.sendTo(new PacketScanResponse(message.filter, matches), player);
+                    /**
+                     * Ae2DebugTools.LOG
+                     * .info("[server] Scan request from {} for filter {}", player.getDisplayName(), message.filter);
+                     * 
+                     * NetworkScanner.ScanResult scanResult = NetworkScanner
+                     * .scan(world, player, message.filter, itemFilter, Config.scanRadius);
+                     * 
+                     * if (!scanResult.otherDimensionCounts.isEmpty()) {
+                     * StringBuilder stringBuilder = new StringBuilder("Also found matching parts in: ");
+                     * boolean first = true;
+                     * for (Map.Entry<Integer, Integer> entry : scanResult.otherDimensionCounts.entrySet()) {
+                     * if (!first) stringBuilder.append(", ");
+                     * stringBuilder.append(entry.getValue())
+                     * .append(" in dimension ")
+                     * .append(entry.getKey());
+                     * first = false;
+                     * }
+                     * player.addChatMessage(new ChatComponentText(stringBuilder.toString()));
+                     * player.addChatComponentMessage(
+                     * new ChatComponentText(
+                     * DimensionManager.getWorld(player.dimension)
+                     * .getProviderName()
+                     * .toString()));
+                     * }
+                     **/
                 }
             });
 
