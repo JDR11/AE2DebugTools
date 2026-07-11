@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 
-    private static File configFile;
+    private static Configuration config;
 
     // Scanner
     public static int maxResults;
@@ -22,21 +22,24 @@ public class Config {
     public static int cubeBorderWarningColour;
 
     public static void synchronizeConfiguration(File configFile) {
-        Config.configFile = configFile;
-        Configuration configuration = new Configuration(configFile);
+        config = new Configuration(configFile);
+        reloadFromConfig();
+    }
+
+    public static void reloadFromConfig() {
 
         try {
-            configuration.load();
+            config.load();
 
-            maxResults = configuration.getInt(
+            maxResults = config.getInt(
                 "maxResults",
                 "scanner",
                 64,
                 1,
-                2048,
+                4096,
                 "Maximum number of blocks a single scan will return/highlight. Prevents huge networks from generating an excessive number of render targets in one scan.");
 
-            scanRadius = configuration.getInt(
+            scanRadius = config.getInt(
                 "scanRadius",
                 "scanner",
                 32,
@@ -44,35 +47,35 @@ public class Config {
                 128,
                 "Radius (in blocks) around the player to search for AE2 network nodes when scanning.");
 
-            verboseLogging = configuration.getBoolean(
+            verboseLogging = config.getBoolean(
                 "verboseLogging",
                 "scanner",
                 false,
                 "If true, logs detailed per-node scan diagnostics to the console. Useful for debugging, noisy otherwise.");
 
-            writeReportFile = configuration.getBoolean(
+            writeReportFile = config.getBoolean(
                 "writeReportFile",
                 "scanner",
                 true,
                 "If true, writes a full text report of every scan match (location + dimension) to <minecraft folder>/ae2debugtools/scan_reports/ each time you scan.");
 
-            cubeTotalLifeMillis = configuration.getInt(
+            cubeTotalLifeMillis = config.getInt(
                 "totalLifeMillis",
                 "renderer",
                 3000,
                 500,
-                60000,
+                6000000,
                 "How long (in milliseconds) a highlighted cube stays visible before disappearing.");
 
-            cubeFadeDurationMillis = configuration.getInt(
+            cubeFadeDurationMillis = config.getInt(
                 "fadeDurationMillis",
                 "renderer",
                 1000,
                 0,
-                60000,
+                6000000,
                 "How long (in milliseconds), at the end of a cube's life, it takes to fade out. Set to 0 to disable fading.");
 
-            cubeLineWidth = configuration.getFloat(
+            cubeLineWidth = config.getFloat(
                 "lineWidth",
                 "renderer",
                 2.0f,
@@ -80,7 +83,7 @@ public class Config {
                 10.0f,
                 "Line thickness of the rendered highlight cube outlines.");
 
-            cubeHighlightColour = configuration.getInt(
+            cubeHighlightColour = config.getInt(
                 "highlightColor",
                 "renderer",
                 0x00FFFF,
@@ -88,7 +91,7 @@ public class Config {
                 0xFFFFFF,
                 "RGB hex color (as a decimal integer, e.g. 65535 = 0x00FFFF = cyan) used to highlight scanned blocks.");
 
-            cubeBorderWarningColour = configuration.getInt(
+            cubeBorderWarningColour = config.getInt(
                 "borderWarningColour",
                 "renderer",
                 0xFFA500,
@@ -97,19 +100,21 @@ public class Config {
                 "RGB hex color (decimal) used to highlight matches near the edge of loaded chunks, where the network may extend further than we can currently see.");
 
         } finally {
-            if (configuration.hasChanged()) {
-                configuration.save();
+            if (config.hasChanged()) {
+                config.save();
             }
         }
+    }
+
+    public static Configuration getConfig() {
+        return config;
     }
 
     public static void setWriteReportFile(boolean value) {
         writeReportFile = value;
 
-        Configuration cfg = new Configuration(configFile);
-        cfg.load();
-        cfg.get("scanner", "writeReportFile", true)
+        config.get("scanner", "writeReportFile", true)
             .set(value);
-        cfg.save();
+        config.save();
     }
 }

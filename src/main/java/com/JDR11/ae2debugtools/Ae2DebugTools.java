@@ -14,7 +14,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     modid = Ae2DebugTools.MODID,
     version = Tags.VERSION,
     name = "AE2DebugTools",
-    acceptedMinecraftVersions = "[1.7.10]")
+    acceptedMinecraftVersions = "[1.7.10]",
+    guiFactory = "com.JDR11.ae2debugtools.client.gui.Ae2DebugToolsGuiFactory")
 public class Ae2DebugTools {
 
     public static final String MODID = "ae2debugtools";

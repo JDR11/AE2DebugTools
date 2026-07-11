@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 
+import com.JDR11.ae2debugtools.client.ConfigChangeHandler;
 import com.JDR11.ae2debugtools.client.gui.GuiHandler;
 import com.JDR11.ae2debugtools.client.render.RenderEventHandler;
 
@@ -30,6 +31,9 @@ public class ClientProxy extends CommonProxy {
             .bus()
             .register(new GuiHandler());
         MinecraftForge.EVENT_BUS.register(new RenderEventHandler());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new ConfigChangeHandler());
     }
 
     @Override
