@@ -16,10 +16,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 
-    public static final KeyBinding openInterface = new KeyBinding(
-        "key.ae2debugtools.open_gui",
-        Keyboard.KEY_NONE,
-        "key.categories.ae2debugtools");
+    public static final KeyBinding openInterface = new KeyBinding("Open GUI", Keyboard.KEY_NONE, "AE2DebugTools");
 
     // Override CommonProxy methods here, if you want a different behaviour on the client (e.g. registering renders).
     // Don't forget to call the super methods as well.
