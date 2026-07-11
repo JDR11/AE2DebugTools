@@ -69,16 +69,16 @@ public class PacketScanRequest implements IMessage {
                     }
 
                     List<NetworkScanner.ScanMatch> matches = NetworkScanner
-                        .scan(world, player, message.filter, itemFilter, Config.scanRadius);
+                        .scan(player, message.filter, itemFilter, Config.scanRadius);
 
                     PacketHandler.INSTANCE.sendTo(new PacketScanResponse(message.filter, matches), player);
                     /**
                      * Ae2DebugTools.LOG
                      * .info("[server] Scan request from {} for filter {}", player.getDisplayName(), message.filter);
-                     * 
+                     *
                      * NetworkScanner.ScanResult scanResult = NetworkScanner
                      * .scan(world, player, message.filter, itemFilter, Config.scanRadius);
-                     * 
+                     *
                      * if (!scanResult.otherDimensionCounts.isEmpty()) {
                      * StringBuilder stringBuilder = new StringBuilder("Also found matching parts in: ");
                      * boolean first = true;

@@ -17,6 +17,7 @@ public class Config {
     public static int cubeFadeDurationMillis;
     public static float cubeLineWidth;
     public static int cubeHighlightColour;
+    public static int cubeBorderWarningColour;
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
@@ -83,6 +84,15 @@ public class Config {
                 0x000000,
                 0xFFFFFF,
                 "RGB hex color (as a decimal integer, e.g. 65535 = 0x00FFFF = cyan) used to highlight scanned blocks.");
+
+            cubeBorderWarningColour = configuration.getInt(
+                "borderWarningColour",
+                "renderer",
+                0xFFA500,
+                0x000000,
+                0xFFFFFF,
+                "RGB hex color (decimal) used to highlight matches near the edge of loaded chunks, where the network may extend further than we can currently see.");
+
         } finally {
             if (configuration.hasChanged()) {
                 configuration.save();

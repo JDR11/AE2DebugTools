@@ -51,6 +51,7 @@ public class PacketScanResponse implements IMessage {
             buf.writeInt(match.z);
             buf.writeInt(match.dimension);
             ByteBufUtils.writeUTF8String(buf, match.label);
+            buf.writeBoolean(match.nearUnloadedBorder);
         }
     }
 
@@ -65,7 +66,8 @@ public class PacketScanResponse implements IMessage {
             int z = buf.readInt();
             int dimension = buf.readInt();
             String label = ByteBufUtils.readUTF8String(buf);
-            matches.add(new ScanMatch(x, y, z, dimension, label));
+            boolean nearUnloadedBorder = buf.readBoolean();
+            matches.add(new ScanMatch(x, y, z, dimension, label, nearUnloadedBorder));
         }
     }
 
@@ -98,10 +100,9 @@ public class PacketScanResponse implements IMessage {
                     List<CubeRendererTarget> targets = new ArrayList<>();
                     for (int i = 0; i < renderCount; i++) {
                         ScanMatch match = sameDimension.get(i);
-                        targets.add(
-                            new CubeRendererTarget(
-                                new BlockPos(match.x, match.y, match.z),
-                                new Color(Config.cubeHighlightColour)));
+                        int colour = match.nearUnloadedBorder ? Config.cubeBorderWarningColour
+                            : Config.cubeHighlightColour;
+                        targets.add(new CubeRendererTarget(new BlockPos(match.x, match.y, match.z), new Color(colour)));
                     }
                     CubeRenderer.INSTANCE.draw(targets);
 
@@ -122,6 +123,15 @@ public class PacketScanResponse implements IMessage {
                                 .append(" in dimension ")
                                 .append(entry.getKey());
                             first = false;
+                        }
+                        long borderCount = message.matches.stream()
+                            .filter(m -> m.nearUnloadedBorder)
+                            .count();
+                        if (borderCount > 0) {
+                            chatMessage.append(" ")
+                                .append(borderCount)
+                                .append(
+                                    " match(es) are near an unloaded chunk border - the network may extend further than shown.");
                         }
                     }
                     player.addChatComponentMessage(new ChatComponentText(chatMessage.toString()));
@@ -178,7 +188,13 @@ public class PacketScanResponse implements IMessage {
 
                     writer.println("== Dimension " + dimension + " (" + dimensionMatches.size() + " match(es)) ==");
                     for (ScanMatch match : dimensionMatches) {
-                        writer.printf("  (%d, %d, %d) - %s%n", match.x, match.y, match.z, match.label);
+                        writer.printf(
+                            "  (%d, %d, %d) - %s%s%n",
+                            match.x,
+                            match.y,
+                            match.z,
+                            match.label,
+                            match.nearUnloadedBorder ? "  [near unloaded chunk border]" : "");
                     }
                     writer.println();
                 }
