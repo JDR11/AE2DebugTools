@@ -111,7 +111,7 @@ public class PacketScanResponse implements IMessage {
                         "Scan found " + message.matches.size()
                             + " total match(es) for \""
                             + message.filter
-                            + "\" "
+                            + "\n"
                             + "Rendering nearest "
                             + renderCount
                             + " in this dimension.");
@@ -134,7 +134,7 @@ public class PacketScanResponse implements IMessage {
                             chatMessage.append(" ")
                                 .append(borderCount)
                                 .append(
-                                    " match(es) are near an unloaded chunk border - the network may extend further than shown.");
+                                    "\nmatch(es) are near an unloaded chunk border - the network may extend further than shown.");
                         }
                     }
                     player.addChatComponentMessage(new ChatComponentText(chatMessage.toString()));

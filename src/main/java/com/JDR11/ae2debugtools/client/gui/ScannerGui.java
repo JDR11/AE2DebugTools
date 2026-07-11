@@ -3,6 +3,7 @@ package com.JDR11.ae2debugtools.client.gui;
 import net.minecraft.item.ItemStack;
 
 import com.JDR11.ae2debugtools.Ae2DebugTools;
+import com.JDR11.ae2debugtools.Config;
 import com.JDR11.ae2debugtools.common.network.PacketHandler;
 import com.JDR11.ae2debugtools.common.network.PacketScanRequest;
 import com.cleanroommc.modularui.api.IGuiHolder;
@@ -13,9 +14,11 @@ import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.utils.item.IItemHandlerModifiable;
 import com.cleanroommc.modularui.utils.item.ItemStackHandler;
+import com.cleanroommc.modularui.value.BoolValue;
 import com.cleanroommc.modularui.value.StringValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.layout.Flow;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.PhantomItemSlot;
@@ -66,7 +69,15 @@ public class ScannerGui implements IGuiHolder<GuiData> {
                                     itemFilter);
                                 PacketHandler.INSTANCE.sendToServer(new PacketScanRequest(scanTarget, itemFilter));
                                 return true;
-                            })));
+                            }))
+                    .child(
+                        new ToggleButton().bottomRelOffset(0f, -110)
+                            .leftRel(0f)
+                            .rightRel(0f)
+                            .size(90, 16)
+                            .value(new BoolValue.Dynamic(() -> Config.writeReportFile, Config::setWriteReportFile))
+                            .overlay(true, IKey.str("Save Report: ON"))
+                            .overlay(false, IKey.str("Save Report: OFF"))));
 
         return panel;
     }

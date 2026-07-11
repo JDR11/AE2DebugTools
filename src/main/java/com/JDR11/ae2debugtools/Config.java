@@ -6,6 +6,8 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 
+    private static File configFile;
+
     // Scanner
     public static int maxResults;
     public static int scanRadius;
@@ -20,6 +22,7 @@ public class Config {
     public static int cubeBorderWarningColour;
 
     public static void synchronizeConfiguration(File configFile) {
+        Config.configFile = configFile;
         Configuration configuration = new Configuration(configFile);
 
         try {
@@ -98,5 +101,15 @@ public class Config {
                 configuration.save();
             }
         }
+    }
+
+    public static void setWriteReportFile(boolean value) {
+        writeReportFile = value;
+
+        Configuration cfg = new Configuration(configFile);
+        cfg.load();
+        cfg.get("scanner", "writeReportFile", true)
+            .set(value);
+        cfg.save();
     }
 }
