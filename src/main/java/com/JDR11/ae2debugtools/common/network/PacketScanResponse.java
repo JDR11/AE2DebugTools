@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.DimensionManager;
 
 import com.JDR11.ae2debugtools.Ae2DebugTools;
 import com.JDR11.ae2debugtools.Config;
@@ -120,8 +121,10 @@ public class PacketScanResponse implements IMessage {
                         for (Map.Entry<Integer, Integer> entry : otherDimensionCounts.entrySet()) {
                             if (!first) chatMessage.append(", ");
                             chatMessage.append(entry.getValue())
-                                .append(" in dimension ")
-                                .append(entry.getKey());
+                                .append(" in ")
+                                .append(
+                                    DimensionManager.createProviderFor(entry.getKey())
+                                        .getDimensionName());
                             first = false;
                         }
                         long borderCount = message.matches.stream()
@@ -149,6 +152,15 @@ public class PacketScanResponse implements IMessage {
             double dy = (match.y + 0.5) - playerY;
             double dz = (match.z + 0.5) - playerZ;
             return dx * dx + dy * dy + dz * dz;
+        }
+
+        private static String getDimensionName(int dimension) {
+            try {
+                return DimensionManager.createProviderFor(dimension)
+                    .getDimensionName();
+            } catch (Exception e) {
+                return "Dimension " + dimension;
+            }
         }
 
         private static void writeReport(String filter, List<ScanMatch> matches) {
@@ -185,8 +197,15 @@ public class PacketScanResponse implements IMessage {
                 for (Map.Entry<Integer, List<ScanMatch>> entry : byDimension.entrySet()) {
                     int dimension = entry.getKey();
                     List<ScanMatch> dimensionMatches = entry.getValue();
+                    String dimensionName = getDimensionName(dimension);
 
-                    writer.println("== Dimension " + dimension + " (" + dimensionMatches.size() + " match(es)) ==");
+                    writer.println(
+                        "== " + dimensionName
+                            + " (dim "
+                            + dimension
+                            + ", "
+                            + dimensionMatches.size()
+                            + " match(es)) ==");
                     for (ScanMatch match : dimensionMatches) {
                         writer.printf(
                             "  (%d, %d, %d) - %s%s%n",
